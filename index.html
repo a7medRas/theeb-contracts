@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>عقد صانع محتوى – وكالة ذيب الشرق الأوسط</title>
+
+<!-- Cairo font -->
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{--bg:#0b0f14;--card:#121823;--ink:#e9eef7;--muted:#a9b4c4;--line:#233044;}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Cairo",system-ui,-apple-system,Segoe UI,Roboto,Arial,"Noto Kufi Arabic",sans-serif;background:linear-gradient(180deg,#0b0f14,#0e1520 30%,#0b0f14);color:var(--ink)}
+  header{padding:14px 16px;display:flex;align-items:center;gap:12px;justify-content:space-between;border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(11,15,20,.7);backdrop-filter:blur(8px);z-index:5}
+  .brand{display:flex;align-items:center;gap:10px}
+  .logo{width:36px;height:36px;border-radius:10px;background:radial-gradient(circle at 30% 30%,#79ffe1,#4cc9f0 40%,#4361ee 80%);box-shadow:0 0 0 2px #172030 inset}
+  h1{font-size:16px;margin:0}
+  .lang-toggle{display:flex;gap:8px}
+  .lang-toggle button{border:1px solid var(--line);background:#0f172a;color:var(--ink);padding:8px 10px;border-radius:10px;cursor:pointer;font-weight:600;font-size:13px}
+
+  .wrap{display:grid;grid-template-columns:380px 1fr;gap:16px;padding:16px;align-items:start}
+  @media (max-width:1024px){.wrap{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+  .card h2{margin:0 0 10px 0;font-size:16px}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
+  input,textarea{width:100%;background:#0c131e;color:var(--ink);border:1px solid #1e293b;border-radius:10px;padding:10px 12px;font-size:14px;outline:none}
+  input[readonly]{opacity:.7;cursor:not-allowed}
+  textarea{min-height:84px;resize:vertical}
+  .hint{font-size:12px;color:var(--muted)}
+  .btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+  button{border:1px solid var(--line);background:#0f172a;color:var(--ink);padding:10px 14px;border-radius:12px;cursor:pointer;font-weight:600}
+  .primary{background:linear-gradient(90deg,#3a86ff,#4cc9f0);color:#071019;border:none}
+  .success{background:linear-gradient(90deg,#16a34a,#22c55e);color:#05130a;border:none}
+  .ghost{background:transparent}
+
+  /* وثيقة العقد */
+  .doc{
+    background:#fff;color:#111;border-radius:16px;padding:28px;border:1px solid #e5e7eb;position:relative;
+    width:794px;             /* تثبيت عرض A4 على الشاشة */
+    margin:0 auto;
+  }
+  .doc h1{font-size:20px;color:#0f172a}
+  .meta{display:flex;gap:18px;flex-wrap:wrap;color:#334155;font-size:13px;margin:8px 0 14px}
+  .hr{height:1px;background:#e5e7eb;margin:14px 0 16px}
+  .kv{display:grid;grid-template-columns:110px 1fr;gap:10px;margin:6px 0}
+  .section h3{font-size:15px;margin:14px 0 8px}
+  .section p{line-height:1.9;margin:4px 0;font-size:14px}
+  .list{margin:0;padding:0 18px}
+  .badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;background:#eef2ff;color:#3730a3;border:1px solid #c7d2fe}
+  table{width:100%;border-collapse:collapse;margin:10px 0}
+  th,td{border:1px solid #e5e7eb;padding:8px;font-size:13px}
+  th{background:#f8fafc}
+  .signs{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:24px}
+  .signBox{min-height:90px;border:1px dashed #cbd5e1;border-radius:10px;padding:8px;font-size:12px;color:#475569}
+  .tiny{font-size:12px;color:#64748b}
+  .id-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .id-card{border:1px dashed #cbd5e1;border-radius:12px;padding:8px;text-align:center;background:#fafafa}
+  .id-card img{max-width:100%;height:auto;border-radius:8px;display:block;margin:6px auto}
+  .id-card .cap{font-size:12px;color:#475569}
+
+  /* لوحة التوقيع */
+  .sig-wrap{border:1px dashed #334155;border-radius:12px;padding:10px;background:#0b1220}
+  .sig-toolbar{display:flex;gap:8px;margin-bottom:8px;align-items:center}
+  .sig-toolbar button{padding:6px 10px;border-radius:10px;font-size:12px}
+  .sig-canvas{width:100%;height:160px;background:#fff;border-radius:10px;touch-action:none;cursor:crosshair;display:block}
+  .sig-note{font-size:11px;color:#94a3b8;margin-top:4px}
+
+  /* العلامة المائية */
+  .watermark{position:absolute;inset:0;pointer-events:none;display:flex;align-items:center;justify-content:center;font-size:90px;font-weight:700;color:rgba(0,0,0,0.05);transform:rotate(-25deg);z-index:0;white-space:nowrap;user-select:none}
+  .doc *:not(.watermark){position:relative;z-index:1}
+  .head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .doc .logo{width:42px;height:42px;border-radius:12px;background:radial-gradient(circle at 30% 30%,#79ffe1,#4cc9f0 40%,#4361ee 80%);box-shadow:0 0 0 2px #e5e7eb inset}
+  .title{display:flex;align-items:center;gap:10px}
+
+  /* طباعة (للتحكم لو حد ضغط Ctrl+P) */
+  @media print{
+    body{background:#fff}
+    header,.card.form{display:none !important}
+    .wrap{display:block;padding:0}
+    .doc{border:none;border-radius:0;box-shadow:none;padding:16mm}
+    .watermark{font-size:120px}
+    img,canvas{image-rendering:auto}
+    @page{size:A4;margin:12mm}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <div class="logo" aria-hidden="true"></div>
+    <h1 data-i18n="title">عقد صانع محتوى – وكالة ذيب الشرق الأوسط</h1>
+  </div>
+  <div class="lang-toggle">
+    <button id="langAr">عربي</button>
+    <button id="langEn">English</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <!-- النموذج -->
+  <section class="card form">
+    <h2 data-i18n="form.contractData">بيانات العقد</h2>
+    <div class="row">
+      <div>
+        <label data-i18n="form.date">تاريخ العقد</label>
+        <input type="date" id="contractDate" />
+      </div>
+      <div>
+        <label data-i18n="form.place">مكان التوقيع</label>
+        <input type="text" id="place" placeholder="القاهرة – مصر" value="القاهرة – مصر" />
+      </div>
+    </div>
+
+    <h2 style="margin-top:12px" data-i18n="form.party1">الطرف الأول (الوكالة)</h2>
+    <div class="row">
+      <div>
+        <label data-i18n="form.agencyName">اسم الوكالة</label>
+        <input type="text" id="agencyName" value="THEEB EG-M1472" readonly />
+      </div>
+      <div>
+        <label data-i18n="form.taxId">السجل/الرقم الضريبي (اختياري)</label>
+        <input type="text" id="agencyReg" value="NO.898989--t" readonly />
+      </div>
+    </div>
+    <div class="row">
+      <div>
+        <label data-i18n="form.agencyRep">ممثل الوكالة</label>
+        <input type="text" id="agencyRep" value="Ahmed Rashed" readonly />
+      </div>
+      <div>
+        <label data-i18n="form.phone">الهاتف</label>
+        <input type="tel" id="agencyPhone" value="00201091545443" readonly />
+      </div>
+    </div>
+    <div>
+      <label data-i18n="form.address">العنوان</label>
+      <input type="text" id="agencyAddr" value="Egypt – Monufia – Shebin El Kom" readonly />
+    </div>
+    <div class="hint" data-i18n="form.party1Fixed">* بيانات الطرف الأول ثابتة كما طلبت.</div>
+
+    <h2 style="margin-top:12px" data-i18n="form.party2">الطرف الثاني (صانع المحتوى)</h2>
+    <div class="row">
+      <div>
+        <label data-i18n="form.name">الاسم</label>
+        <input type="text" id="creatorName" placeholder="الاسم الثلاثي" />
+      </div>
+      <div>
+        <label data-i18n="form.idNum">رقم الهوية/الجواز</label>
+        <input type="text" id="creatorId" placeholder="—" />
+      </div>
+    </div>
+    <div class="row">
+      <div>
+        <label data-i18n="form.phone2">الهاتف</label>
+        <input type="tel" id="creatorPhone" placeholder="+20…" />
+      </div>
+      <div>
+        <label data-i18n="form.email">البريد الإلكتروني</label>
+        <input type="email" id="creatorEmail" placeholder="name@email.com" />
+      </div>
+    </div>
+    <div class="row">
+      <div>
+        <label data-i18n="form.likee">معرّف Likee</label>
+        <input type="text" id="creatorLikee" placeholder="Likee ID" />
+      </div>
+      <div>
+        <label data-i18n="form.address2">العنوان</label>
+        <input type="text" id="creatorAddr" placeholder="العنوان الكامل" />
+      </div>
+    </div>
+
+    <h2 style="margin-top:12px" data-i18n="form.idPhotos">صور الهوية (الطرف الثاني)</h2>
+    <div class="row">
+      <div>
+        <label data-i18n="form.idFront">وجه الهوية (Front)</label>
+        <input type="file" id="idFront" accept="image/*" />
+      </div>
+      <div>
+        <label data-i18n="form.idBack">ظهر الهوية (Back)</label>
+        <input type="file" id="idBack" accept="image/*" />
+      </div>
+    </div>
+    <div class="hint" data-i18n="form.idNote">* تُدمج الصور داخل العقد تلقائيًا عند الحفظ PDF.</div>
+
+    <h2 style="margin-top:12px" data-i18n="form.signatures">التوقيعات الرقمية</h2>
+    <div class="sig-wrap">
+      <div class="sig-toolbar">
+        <strong style="font-size:13px" data-i18n="sig.agency">توقيع الطرف الأول (الوكالة)</strong>
+        <span style="flex:1"></span>
+        <button type="button" class="ghost" id="sigAgencyClear" data-i18n="sig.clear">مسح</button>
+        <button type="button" class="primary" id="sigAgencySave" data-i18n="sig.save">حفظ التوقيع</button>
+      </div>
+      <canvas class="sig-canvas" id="sigAgency" width="900" height="300"></canvas>
+      <div class="sig-note" data-i18n="sig.note">ارسم توقيعك بالماوس أو الإصبع ثم اضغط حفظ.</div>
+    </div>
+    <div style="height:8px"></div>
+    <div class="sig-wrap">
+      <div class="sig-toolbar">
+        <strong style="font-size:13px" data-i18n="sig.creator">توقيع الطرف الثاني (صانع المحتوى)</strong>
+        <span style="flex:1"></span>
+        <button type="button" class="ghost" id="sigCreatorClear" data-i18n="sig.clear">مسح</button>
+        <button type="button" class="primary" id="sigCreatorSave" data-i18n="sig.save">حفظ التوقيع</button>
+      </div>
+      <canvas class="sig-canvas" id="sigCreator" width="900" height="300"></canvas>
+      <div class="sig-note" data-i18n="sig.note">ارسم توقيعك بالماوس أو الإصبع ثم اضغط حفظ.</div>
+    </div>
+
+    <h2 style="margin-top:12px" data-i18n="form.targets">التارجيت الشهري</h2>
+    <div class="hint" data-i18n="form.targetsHint">حرّر الجدول، وأضِف صفوفًا حسب الحاجة.</div>
+    <table id="targetTable">
+      <thead>
+        <tr><th data-i18n="table.month">الشهر</th><th data-i18n="table.target">التارجيت</th><th data-i18n="table.pay">المقابل (جنيه/دولار)</th></tr>
+      </thead>
+      <tbody contenteditable="true">
+        <tr><td data-i18n="m.jan">يناير</td><td>—</td><td>—</td></tr>
+        <tr><td data-i18n="m.feb">فبراير</td><td>—</td><td>—</td></tr>
+      </tbody>
+    </table>
+    <div class="btns">
+      <button class="ghost" id="addRowBtn" data-i18n="btn.addRow">+ إضافة صف</button>
+    </div>
+
+    <div class="btns">
+      <button class="primary" id="applyBtn" data-i18n="btn.apply">تحديث المعاينة</button>
+      <button class="success" id="savePdfBtn">💾 <span data-i18n="btn.print">حفظ PDF</span></button>
+      <button id="clearBtn" data-i18n="btn.clear">مسح الحقول</button>
+    </div>
+    <div class="hint" data-i18n="form.autoSave">يتم حفظ المسودة تلقائيًا على جهازك.</div>
+  </section>
+
+  <!-- العقد -->
+  <section class="card">
+    <div class="doc" id="doc">
+      <div class="watermark">THEEB.EG</div>
+
+      <div class="head">
+        <div class="title">
+          <div class="logo" aria-hidden="true"></div>
+          <div>
+            <h1 data-i18n="doc.title">عقد صانع المحتوى</h1>
+            <div class="tiny">
+              <span data-i18n="doc.between">بين:</span>
+              <span id="pAgencyName">THEEB EG-M1472</span>
+              <span data-i18n="doc.party1">(الطرف الأول)</span>
+              <span data-i18n="doc.and">و</span>
+              <span id="pCreatorName">—</span>
+              <span data-i18n="doc.party2">(الطرف الثاني)</span>
+            </div>
+          </div>
+        </div>
+        <span class="badge" data-i18n="doc.badge">سري – للاستخدام التعاقدي</span>
+      </div>
+
+      <div class="meta">
+        <div><span data-i18n="doc.date">تاريخ العقد:</span> <strong id="pDate">—</strong></div>
+        <div><span data-i18n="doc.place">المكان:</span> <strong id="pPlace">القاهرة – مصر</strong></div>
+      </div>
+      <div class="hr"></div>
+
+      <div class="section">
+        <h3 data-i18n="doc.preambleTitle">تمهيد:</h3>
+        <p data-i18n="doc.preambleText">تمّ الاتفاق بين الطرفين الموضّحين أدناه على إبرام هذا العقد، ويُعتبر ما يَرِد فيه من بنود مُلزِمًا للطرفين:</p>
+        <div class="kv"><div data-i18n="doc.party1Label">الطرف الأول:</div><div id="pAgencyBlock"></div></div>
+        <div class="kv"><div data-i18n="doc.party2Label">الطرف الثاني:</div><div id="pCreatorBlock"></div></div>
+      </div>
+
+      <div class="hr"></div>
+
+      <div class="section" id="clauses">
+        <h3 data-i18n="doc.clausesTitle">📜 بنود عقد صانع المحتوى – وكالة ذيب الشرق الأوسط</h3>
+
+        <p data-i18n="c1"><strong>البند الأول – موضوع العقد:</strong><br>يتعهد الطرف الثاني (صانع المحتوى) بإنتاج ونشر محتوى مرئي وصوتي على منصة Likee بما يتوافق مع المعايير المحددة من قبل الطرف الأول (وكالة ذيب الشرق الأوسط)، وذلك مقابل الأجر المحدد في هذا العقد.</p>
+
+        <p data-i18n="c2"><strong>البند الثاني – مدة العقد:</strong><br>تبدأ مدة هذا العقد من تاريخ توقيعه ولمدة أربع (4) سنوات قابلة للتجديد باتفاق الطرفين كتابةً.</p>
+
+        <p data-i18n="c3"><strong>البند الثالث – الأجر والمستحقات:</strong><br>الأجر يُحسب شهريًا وفقًا لتحقيق التارجيت المحدد لكل شهر، وذلك حسب جدول التارجيت المرفق والمعتمد من الطرف الأول. يتم صرف المستحقات خلال مدة أقصاها (15) يوم عمل من نهاية كل شهر.</p>
+
+        <p data-i18n="c4Title"><strong>البند الرابع – التزامات صانع المحتوى:</strong></p>
+        <ol class="list" data-i18n-list="c4List">
+          <li>الالتزام بنشر عدد ونوع المحتوى المطلوب حسب خطة العمل.</li>
+          <li>الالتزام بجميع قوانين وسياسات منصة Likee.</li>
+          <li>الحفاظ على صورة لائقة وشكل مهني في جميع الأعمال المنشورة.</li>
+          <li>عدم العمل أو التعاون مع أي منصات أو جهات منافسة طوال فترة العقد.</li>
+          <li>الالتزام بمواعيد النشر المحددة من الطرف الأول.</li>
+        </ol>
+
+        <p data-i18n="c5Title"><strong>البند الخامس – التزامات الوكالة:</strong></p>
+        <ol class="list" data-i18n-list="c5List">
+          <li>توفير الدعم الفني والإرشادات اللازمة لنجاح صانع المحتوى.</li>
+          <li>تقديم التدريب والمتابعة الدورية لضمان جودة المحتوى.</li>
+          <li>صرف المستحقات في مواعيدها وفق الشروط المتفق عليها.</li>
+        </ol>
+
+        <p data-i18n="c6"><strong>البند السادس – الملكية الفكرية:</strong><br>جميع الحقوق المتعلقة بالمحتوى الذي ينتجه الطرف الثاني خلال فترة العقد تعود ملكيتها للطرف الأول، ولا يحق للطرف الثاني إعادة نشر أو بيع هذا المحتوى دون موافقة كتابية من الطرف الأول.</p>
+
+        <p data-i18n="c7"><strong>البند السابع – إنهاء العقد:</strong><br>يجوز لأي من الطرفين إنهاء العقد بإشعار كتابي للطرف الآخر قبل مدة لا تقل عن (30) يومًا، على أن يلتزم الطرفان بتصفية جميع الالتزامات المالية والقانونية.</p>
+
+        <p data-i18n="c8"><strong>البند الثامن – أحكام عامة:</strong><br>في حال حدوث خلاف بين الطرفين، يتم حله وديًا، وإذا تعذر ذلك يُحال النزاع إلى الجهات القضائية المختصة. يعتبر هذا العقد بكامل بنوده ملزمًا للطرفين بمجرد توقيعه.</p>
+
+        <p data-i18n="c9"><strong>البند التاسع – حصرية التعاقد:</strong><br>في حال اكتشاف أن الطرف الثاني (صانع المحتوى) مسجل أو متعاقد مع وكالة أخرى خلال فترة سريان هذا العقد، يحق للطرف الأول (الوكالة) اتخاذ الإجراءات اللازمة من خلال إدارة التطبيق، بما في ذلك إيقاف النشاط أو إنهاء التعاقد فورًا دون أي تعويض.</p>
+
+        <p data-i18n="c10"><strong>البند العاشر – الحق في المطالبة القانونية:</strong><br>يحق للطرف الثاني (صانع المحتوى) اللجوء إلى الجهات القانونية المختصة ومقاضاة الطرف الأول (الوكالة) في حال عدم استلام الأجر المتفق عليه في المواعيد المحددة، مع احتفاظه بكافة حقوقه المالية والقانونية.</p>
+      </div>
+
+      <div class="section">
+        <h3 data-i18n="doc.tableTitle">📊 جدول التارجيت المرفق</h3>
+        <div id="pTargetTable"></div>
+        <div class="tiny" data-i18n="doc.tableNote">* الجدول جزء لا يتجزأ من العقد ويجوز تحديثه باتفاق الطرفين كتابيًا.</div>
+      </div>
+
+      <div class="section">
+        <h3 data-i18n="doc.idTitle">🪪 صور هوية الطرف الثاني</h3>
+        <div class="id-grid">
+          <div class="id-card">
+            <div class="cap" data-i18n="doc.idFrontCap">وجه الهوية (Front)</div>
+            <img id="pIdFront" alt="ID Front" />
+          </div>
+          <div class="id-card">
+            <div class="cap" data-i18n="doc.idBackCap">ظهر الهوية (Back)</div>
+            <img id="pIdBack" alt="ID Back" />
+          </div>
+        </div>
+        <div class="tiny" style="margin-top:6px" data-i18n="doc.idNote">* تُستخدم الصور لأغراض التعاقد فقط.</div>
+      </div>
+
+      <div class="signs">
+        <div>
+          <strong data-i18n="doc.signAgency">توقيع الطرف الأول (الوكالة)</strong>
+          <div class="signBox">
+            <div><span data-i18n="doc.name">الاسم:</span> <span id="pAgencyRepSign">Ahmed Rashed</span></div>
+            <div style="margin-top:6px"><img id="pAgencySig" alt="Agency Signature" style="max-width:100%;height:auto"/></div>
+          </div>
+        </div>
+        <div>
+          <strong data-i18n="doc.signCreator">توقيع الطرف الثاني (صانع المحتوى)</strong>
+          <div class="signBox">
+            <div><span data-i18n="doc.name">الاسم:</span> <span id="pCreatorSign">—</span></div>
+            <div style="margin-top:6px"><img id="pCreatorSig" alt="Creator Signature" style="max-width:100%;height:auto"/></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tiny" style="margin-top:12px">
+        <span data-i18n="doc.footer1">تمّ تحرير هذا العقد بتاريخ</span> <span id="pDate2">—</span>
+        <span data-i18n="doc.footer2">في</span> <span id="pPlace2">—</span>
+        <span data-i18n="doc.footer3">وبنسختين أصليتين بيد كل طرف نسخة.</span>
+      </div>
+    </div>
+
+    <div class="btns" style="margin-top:12px">
+      <button class="success" id="savePdfBtn2">💾 <span data-i18n="btn.print">حفظ PDF</span></button>
+    </div>
+  </section>
+</div>
+
+<!-- ======== مكتبات: محلي أولاً ثم CDN احتياطي ======== -->
+<script src="assets/js/html2canvas.min.js"></script>
+<script>
+  if (typeof html2canvas === 'undefined') {
+    var s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+    document.head.appendChild(s);
+  }
+</script>
+
+<script src="assets/js/jspdf.umd.min.js"></script>
+<script>
+  if (!(window.jspdf && window.jspdf.jsPDF)) {
+    var s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+    document.head.appendChild(s);
+  }
+</script>
+
+<script>
+  const $ = (id)=>document.getElementById(id);
+
+  /* ===================== i18n ===================== */
+  const I18N = {
+    ar:{title:"عقد صانع محتوى – وكالة ذيب الشرق الأوسط",
+      form:{contractData:"بيانات العقد",date:"تاريخ العقد",place:"مكان التوقيع",party1:"الطرف الأول (الوكالة)",agencyName:"اسم الوكالة",taxId:"السجل/الرقم الضريبي (اختياري)",agencyRep:"ممثل الوكالة",phone:"الهاتف",address:"العنوان",party1Fixed:"* بيانات الطرف الأول ثابتة كما طلبت.",party2:"الطرف الثاني (صانع المحتوى)",name:"الاسم",idNum:"رقم الهوية/الجواز",phone2:"الهاتف",email:"البريد الإلكتروني",likee:"معرّف Likee",address2:"العنوان",idPhotos:"صور الهوية (الطرف الثاني)",idFront:"وجه الهوية (Front)",idBack:"ظهر الهوية (Back)",idNote:"* تُدمج الصور داخل العقد تلقائيًا عند الحفظ PDF.",signatures:"التوقيعات الرقمية",targets:"التارجيت الشهري",targetsHint:"حرّر الجدول، وأضِف صفوفًا حسب الحاجة.",autoSave:"يتم حفظ المسودة تلقائيًا على جهازك."},
+      sig:{agency:"توقيع الطرف الأول (الوكالة)",creator:"توقيع الطرف الثاني (صانع المحتوى)",clear:"مسح",save:"حفظ التوقيع",note:"ارسم توقيعك بالماوس أو الإصبع ثم اضغط حفظ."},
+      table:{month:"الشهر",target:"التارجيت",pay:"المقابل (جنيه/دولار)"},
+      m:{jan:"يناير",feb:"فبراير"},
+      btn:{addRow:"+ إضافة صف",apply:"تحديث المعاينة",print:"حفظ PDF",clear:"مسح الحقول"},
+      doc:{title:"عقد صانع المحتوى",between:"بين:",party1:"(الطرف الأول)",and:"و",party2:"(الطرف الثاني)",badge:"سري – للاستخدام التعاقدي",date:"تاريخ العقد:",place:"المكان:",preambleTitle:"تمهيد:",preambleText:"تمّ الاتفاق بين الطرفين الموضّحين أدناه على إبرام هذا العقد، ويُعتبر ما يَرِد فيه من بنود مُلزِمًا للطرفين:",party1Label:"الطرف الأول:",party2Label:"الطرف الثاني:",clausesTitle:"📜 بنود عقد صانع المحتوى – وكالة ذيب الشرق الأوسط",idTitle:"🪪 صور هوية الطرف الثاني",idFrontCap:"وجه الهوية (Front)",idBackCap:"ظهر الهوية (Back)",idNote:"* تُستخدم الصور لأغراض التعاقد فقط.",signAgency:"توقيع الطرف الأول (الوكالة)",signCreator:"توقيع الطرف الثاني (صانع المحتوى)",name:"الاسم:",tableTitle:"📊 جدول التارجيت المرفق",tableNote:"* الجدول جزء لا يتجزأ من العقد ويجوز تحديثه باتفاق الطرفين كتابيًا.",footer1:"تمّ تحرير هذا العقد بتاريخ",footer2:"في",footer3:"وبنسختين أصليتين بيد كل طرف نسخة."},
+      c1:"<strong>البند الأول – موضوع العقد:</strong><br>يتعهد الطرف الثاني (صانع المحتوى) بإنتاج ونشر محتوى مرئي وصوتي على منصة Likee بما يتوافق مع المعايير المحددة من قبل الطرف الأول (وكالة ذيب الشرق الأوسط)، وذلك مقابل الأجر المحدد في هذا العقد.",
+      c2:"<strong>البند الثاني – مدة العقد:</strong><br>تبدأ مدة هذا العقد من تاريخ توقيعه ولمدة أربع (4) سنوات قابلة للتجديد باتفاق الطرفين كتابةً.",
+      c3:"<strong>البند الثالث – الأجر والمستحقات:</strong><br>الأجر يُحسب شهريًا وفقًا لتحقيق التارجيت المحدد لكل شهر، وذلك حسب جدول التارجيت المرفق والمعتمد من الطرف الأول. يتم صرف المستحقات خلال مدة أقصاها (15) يوم عمل من نهاية كل شهر.",
+      c4Title:"<strong>البند الرابع – التزامات صانع المحتوى:</strong>", c4List:["الالتزام بنشر عدد ونوع المحتوى المطلوب حسب خطة العمل.","الالتزام بجميع قوانين وسياسات منصة Likee.","الحفاظ على صورة لائقة وشكل مهني في جميع الأعمال المنشورة.","عدم العمل أو التعاون مع أي منصات أو جهات منافسة طوال فترة العقد.","الالتزام بمواعيد النشر المحددة من الطرف الأول."],
+      c5Title:"<strong>البند الخامس – التزامات الوكالة:</strong>", c5List:["توفير الدعم الفني والإرشادات اللازمة لنجاح صانع المحتوى.","تقديم التدريب والمتابعة الدورية لضمان جودة المحتوى.","صرف المستحقات في مواعيدها وفق الشروط المتفق عليها."],
+      c6:"<strong>البند السادس – الملكية الفكرية:</strong><br>جميع الحقوق المتعلقة بالمحتوى الذي ينتجه الطرف الثاني خلال فترة العقد تعود ملكيتها للطرف الأول، ولا يحق للطرف الثاني إعادة نشر أو بيع هذا المحتوى دون موافقة كتابية من الطرف الأول.",
+      c7:"<strong>البند السابع – إنهاء العقد:</strong><br>يجوز لأي من الطرفين إنهاء العقد بإشعار كتابي للطرف الآخر قبل مدة لا تقل عن (30) يومًا، على أن يلتزم الطرفان بتصفية جميع الالتزامات المالية والقانونية.",
+      c8:"<strong>البند الثامن – أحكام عامة:</strong><br>في حال حدوث خلاف بين الطرفين، يتم حله وديًا، وإذا تعذر ذلك يُحال النزاع إلى الجهات القضائية المختصة. يعتبر هذا العقد بكامل بنوده ملزمًا للطرفين بمجرد توقيعه.",
+      c9:"<strong>البند التاسع – حصرية التعاقد:</strong><br>في حال اكتشاف أن الطرف الثاني (صانع المحتوى) مسجل أو متعاقد مع وكالة أخرى خلال فترة سريان هذا العقد، يحق للطرف الأول (الوكالة) اتخاذ الإجراءات اللازمة من خلال إدارة التطبيق، بما في ذلك إيقاف النشاط أو إنهاء التعاقد فورًا دون أي تعويض.",
+      c10:"<strong>البند العاشر – الحق في المطالبة القانونية:</strong><br>يحق للطرف الثاني (صانع المحتوى) اللجوء إلى الجهات القانونية المختصة ومقاضاة الطرف الأول (الوكالة) في حال عدم استلام الأجر المتفق عليه في المواعيد المحددة، مع احتفاظه بكافة حقوقه المالية والقانونية."
+    },
+    en:{title:"Content Creator Contract – Theeb Middle East Agency",
+      form:{contractData:"Contract Details",date:"Contract Date",place:"Signing Place",party1:"Party A (Agency)",agencyName:"Agency Name",taxId:"Registry/Tax No. (optional)",agencyRep:"Agency Representative",phone:"Phone",address:"Address",party1Fixed:"* Party A details are fixed as requested.",party2:"Party B (Creator)",name:"Full Name",idNum:"ID/Passport No.",phone2:"Phone",email:"Email",likee:"Likee ID",address2:"Address",idPhotos:"ID Photos (Party B)",idFront:"ID Front",idBack:"ID Back",idNote:"* Photos are embedded in the contract automatically when saving PDF.",signatures:"Digital Signatures",targets:"Monthly Target",targetsHint:"Edit the table and add rows as needed.",autoSave:"Draft is saved automatically on your device."},
+      sig:{agency:"Party A Signature (Agency)",creator:"Party B Signature (Creator)",clear:"Clear",save:"Save Signature",note:"Draw with mouse or finger, then click Save."},
+      table:{month:"Month",target:"Target",pay:"Compensation (EGP/USD)"},
+      m:{jan:"January",feb:"February"},
+      btn:{addRow:"+ Add Row",apply:"Update Preview",print:"Save PDF",clear:"Clear Fields"},
+      doc:{title:"Content Creator Contract",between:"Between:",party1:"(Party A)",and:"and",party2:"(Party B)",badge:"Confidential – Contract Use Only",date:"Contract Date:",place:"Place:",preambleTitle:"Preamble:",preambleText:"Both parties agree to enter into this contract, and all clauses herein are binding on both parties:",party1Label:"Party A:",party2Label:"Party B:",clausesTitle:"📜 Contract Clauses – Theeb Middle East Agency",idTitle:"🪪 Party B ID Photos",idFrontCap:"ID Front",idBackCap:"ID Back",idNote:"* Photos are used for contracting purposes only.",signAgency:"Party A Signature (Agency)",signCreator:"Party B Signature (Creator)",name:"Name:",tableTitle:"📊 Attached Target Table",tableNote:"* The table is an integral part of this contract and may be updated in writing by mutual agreement.",footer1:"This contract was issued on",footer2:"in",footer3:"in two original copies; each party holds one."},
+      c1:"<strong>Clause 1 – Subject:</strong><br>Party B (Creator) shall produce and publish audio-visual content on Likee, in accordance with standards set by Party A (Theeb Middle East Agency), in return for the remuneration specified herein.",
+      c2:"<strong>Clause 2 – Term:</strong><br>The contract term starts from the date of signature for four (4) years, renewable by written agreement of both parties.",
+      c3:"<strong>Clause 3 – Remuneration:</strong><br>Monthly pay is calculated per the monthly target achieved, as per the attached target table approved by Party A. Payments shall be made within fifteen (15) business days after month-end.",
+      c4Title:"<strong>Clause 4 – Creator Obligations:</strong>", c4List:["Publish the required quantity/type of content per the work plan.","Comply with all Likee rules and policies.","Maintain a decent and professional image in all published work.","Do not work with competing platforms/entities during the contract term.","Follow the posting schedule set by Party A."],
+      c5Title:"<strong>Clause 5 – Agency Obligations:</strong>", c5List:["Provide technical support and guidance to ensure creator success.","Offer training and periodic follow-up to ensure content quality.","Disburse payments on time per agreed conditions."],
+      c6:"<strong>Clause 6 – IP:</strong><br>All rights to content produced by Party B during the contract term belong to Party A. Party B may not republish/sell such content without written consent from Party A.",
+      c7:"<strong>Clause 7 – Termination:</strong><br>Either party may terminate with at least thirty (30) days’ written notice; both parties must settle outstanding obligations.",
+      c8:"<strong>Clause 8 – General:</strong><br>Disputes are resolved amicably; otherwise referred to competent courts. The contract is binding upon signature.",
+      c9:"<strong>Clause 9 – Exclusivity:</strong><br>If Party B is found registered/contracted with another agency during the contract term, Party A may take actions via the app administration, including suspension or immediate termination without compensation.",
+      c10:"<strong>Clause 10 – Legal Claim Right:</strong><br>Party B may pursue legal action against Party A if agreed pay is not received on time, without prejudice to all financial/legal rights."
+    }
+  };
+
+  const translatable = document.querySelectorAll("[data-i18n]");
+  const listTranslatable = document.querySelectorAll("[data-i18n-list]");
+
+  function setLang(lang){
+    const dict = I18N[lang];
+    translatable.forEach(el=>{
+      const key = el.getAttribute("data-i18n");
+      const v = key.split('.').reduce((o,k)=>o&&o[k], dict);
+      if(typeof v==="string") el.innerHTML = v;
+    });
+    listTranslatable.forEach(el=>{
+      const key = el.getAttribute("data-i18n-list");
+      const arr = key.split('.').reduce((o,k)=>o&&o[k], dict);
+      if(Array.isArray(arr)) el.innerHTML = arr.map(x=>`<li>${x}</li>`).join("");
+    });
+    const months = ["m.jan","m.feb"];
+    months.forEach((mk,i)=>{
+      const cell = document.querySelectorAll("#targetTable tbody tr")[i]?.querySelector("td");
+      if(cell){ cell.textContent = mk.split('.').reduce((o,k)=>o&&o[k], dict); }
+    });
+    const html = document.documentElement;
+    html.lang = (lang==="ar")?"ar":"en";
+    html.dir  = (lang==="ar")?"rtl":"ltr";
+    document.title = dict.title;
+    localStorage.setItem("theeb_lang", lang);
+  }
+  $("langAr").addEventListener("click", ()=>{ setLang("ar"); buildBlocks(); });
+  $("langEn").addEventListener("click", ()=>{ setLang("en"); buildBlocks(); });
+  setLang(localStorage.getItem("theeb_lang") || "ar");
+
+  /* ===================== الحفظ/الاسترجاع ===================== */
+  const fields = ["contractDate","place","agencyName","agencyReg","agencyRep","agencyPhone","agencyAddr","creatorName","creatorId","creatorPhone","creatorEmail","creatorLikee","creatorAddr"];
+
+  function saveDraft(){
+    const data = {};
+    fields.forEach(f=> data[f] = $(f).value);
+    data.targetHTML = $("targetTable").querySelector("tbody").innerHTML;
+    data.idFrontDataURL = $("pIdFront").src || "";
+    data.idBackDataURL  = $("pIdBack").src  || "";
+    data.agencySigDataURL = $("pAgencySig").src || "";
+    data.creatorSigDataURL= $("pCreatorSig").src || "";
+    data.lang = document.documentElement.lang;
+    localStorage.setItem("theeb_contract_draft", JSON.stringify(data));
+  }
+
+  (function restoreDraft(){
+    try{
+      const data = JSON.parse(localStorage.getItem("theeb_contract_draft")||"{}");
+      if(data.lang) setLang(data.lang);
+      fields.forEach(f=>{ if(data[f]!==undefined) $(f).value = data[f]; });
+      if(data.targetHTML) $("targetTable").querySelector("tbody").innerHTML = data.targetHTML;
+      if(data.idFrontDataURL) $("pIdFront").src = data.idFrontDataURL;
+      if(data.idBackDataURL)  $("pIdBack").src  = data.idBackDataURL;
+      if(data.agencySigDataURL) $("pAgencySig").src = data.agencySigDataURL;
+      if(data.creatorSigDataURL) $("pCreatorSig").src = data.creatorSigDataURL;
+      // تثبيت بيانات الطرف الأول
+      $("agencyName").value = "THEEB EG-M1472";
+      $("agencyReg").value  = "NO.898989--t";
+      $("agencyRep").value  = "Ahmed Rashed";
+      $("agencyPhone").value= "00201091545443";
+      $("agencyAddr").value = "Egypt – Monufia – Shebin El Kom";
+    }catch(e){}
+  })();
+
+  document.addEventListener("input",(e)=>{
+    if(e.target.matches("input, textarea, table[contenteditable]")) saveDraft();
+  });
+
+  /* ===================== ضغط صور الهوية قبل الإدراج ===================== */
+  function compressAndPreview(file, outImgId, maxW=1200, quality=0.8){
+    const img = new Image();
+    img.onload = () => {
+      const scale = Math.min(1, maxW / img.naturalWidth);
+      const w = Math.round(img.naturalWidth  * scale);
+      const h = Math.round(img.naturalHeight * scale);
+      const c = document.createElement('canvas');
+      c.width = w; c.height = h;
+      const ctx = c.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+      $(outImgId).src = c.toDataURL('image/jpeg', quality);
+      saveDraft();
+      URL.revokeObjectURL(img.src);
+    };
+    img.src = URL.createObjectURL(file);
+  }
+
+  $("idFront").addEventListener("change", e=>{
+    const f=e.target.files?.[0]; if(!f) return;
+    compressAndPreview(f, "pIdFront", 1200, 0.8);
+  });
+  $("idBack").addEventListener("change", e=>{
+    const f=e.target.files?.[0]; if(!f) return;
+    compressAndPreview(f, "pIdBack", 1200, 0.8);
+  });
+
+  /* ===================== توقيع رقمي ===================== */
+  function setupSignature(canvasId, saveBtnId, clearBtnId, imgOutId){
+    const canvas = $(canvasId), ctx = canvas.getContext("2d");
+    let drawing=false, last={x:0,y:0}, scale=1;
+
+    function resizeForDPR(){
+      const rect = canvas.getBoundingClientRect();
+      const dpr = Math.max(window.devicePixelRatio||1,1);
+      canvas.width  = Math.floor(rect.width * dpr);
+      canvas.height = Math.floor(rect.height * dpr);
+      scale = dpr;
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+      ctx.lineWidth = 2;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.strokeStyle = "#111";
+    }
+    setTimeout(resizeForDPR,0);
+    window.addEventListener("resize", ()=>{ 
+      const img = new Image(); img.onload=()=>{ resizeForDPR(); ctx.drawImage(img,0,0,canvas.width/scale,canvas.height/scale); };
+      img.src = $(imgOutId).src || "";
+    });
+
+    function pos(e){
+      const r = canvas.getBoundingClientRect();
+      const p = (e.touches && e.touches[0]) || e;
+      return {x:(p.clientX - r.left), y:(p.clientY - r.top)};
+    }
+    function start(e){ e.preventDefault(); drawing=true; last=pos(e); }
+    function move(e){
+      if(!drawing) return;
+      const p = pos(e);
+      ctx.beginPath(); ctx.moveTo(last.x, last.y); ctx.lineTo(p.x, p.y); ctx.stroke();
+      last = p;
+    }
+    function end(){ drawing=false; }
+
+    canvas.addEventListener("pointerdown", start);
+    canvas.addEventListener("pointermove", move);
+    window.addEventListener("pointerup", end);
+    canvas.addEventListener("touchstart", start, {passive:false});
+    canvas.addEventListener("touchmove", move, {passive:false});
+    window.addEventListener("touchend", end);
+
+    $(clearBtnId).addEventListener("click", ()=>{
+      const rect = canvas.getBoundingClientRect();
+      ctx.clearRect(0,0,rect.width,rect.height);
+      $(imgOutId).removeAttribute("src");
+      saveDraft();
+    });
+    $(saveBtnId).addEventListener("click", ()=>{
+      const rect = canvas.getBoundingClientRect();
+      const tmp = document.createElement("canvas");
+      tmp.width = rect.width; tmp.height = rect.height;
+      const tctx = tmp.getContext("2d");
+      tctx.drawImage(canvas,0,0,rect.width,rect.height);
+      $(imgOutId).src = tmp.toDataURL("image/png");
+      saveDraft();
+      alert(document.documentElement.lang==="ar"?"تم حفظ التوقيع.":"Signature saved.");
+    });
+  }
+  setupSignature("sigAgency","sigAgencySave","sigAgencyClear","pAgencySig");
+  setupSignature("sigCreator","sigCreatorSave","sigCreatorClear","pCreatorSig");
+
+  /* ===================== جدول التارجيت ===================== */
+  $("addRowBtn").addEventListener("click", ()=>{
+    const tr=document.createElement("tr");
+    tr.innerHTML="<td>—</td><td>—</td><td>—</td>";
+    $("targetTable").querySelector("tbody").appendChild(tr);
+    saveDraft();
+  });
+
+  /* ===================== توليد المعاينة ===================== */
+  function buildBlocks(){
+    const lang = document.documentElement.lang;
+    const dict = I18N[lang];
+
+    const agencyBlock = `
+      <strong>${$("agencyName").value}</strong><br>
+      ${dict.form.agencyRep}: ${$("agencyRep").value}<br>
+      ${dict.form.phone}: ${$("agencyPhone").value}<br>
+      ${dict.form.taxId}: ${$("agencyReg").value}<br>
+      ${dict.form.address}: ${$("agencyAddr").value}
+    `;
+    const creatorBlock = `
+      <strong>${$("creatorName").value || "—"}</strong><br>
+      ${dict.form.idNum}: ${$("creatorId").value || "—"}<br>
+      ${dict.form.phone2}: ${$("creatorPhone").value || "—"}<br>
+      ${dict.form.email}: ${$("creatorEmail").value || "—"}<br>
+      Likee ID: ${$("creatorLikee").value || "—"}<br>
+      ${dict.form.address2}: ${$("creatorAddr").value || "—"}
+    `;
+    $("pAgencyBlock").innerHTML = agencyBlock;
+    $("pCreatorBlock").innerHTML = creatorBlock;
+
+    $("pAgencyName").textContent = $("agencyName").value;
+    $("pCreatorName").textContent = $("creatorName").value || "—";
+    $("pAgencyRepSign").textContent = $("agencyRep").value;
+    $("pCreatorSign").textContent = $("creatorName").value || "—";
+
+    const d = $("contractDate").value ? new Date($("contractDate").value) : null;
+    const fmt = (date)=> date ? date.toLocaleDateString(lang==="ar"?'ar-EG':'en-GB',{year:'numeric',month:'long',day:'numeric'}) : "—";
+    const place = $("place").value || (lang==="ar"?"القاهرة – مصر":"Cairo – Egypt");
+    $("pDate").textContent  = fmt(d);
+    $("pPlace").textContent = place;
+    $("pDate2").textContent = fmt(d);
+    $("pPlace2").textContent= place;
+
+    document.querySelector('[data-i18n="c1"]').innerHTML = dict.c1;
+    document.querySelector('[data-i18n="c2"]').innerHTML = dict.c2;
+    document.querySelector('[data-i18n="c3"]').innerHTML = dict.c3;
+    document.querySelector('[data-i18n="c4Title"]').innerHTML = dict.c4Title;
+    document.querySelector('[data-i18n-list="c4List"]').innerHTML = dict.c4List.map(x=>`<li>${x}</li>`).join("");
+    document.querySelector('[data-i18n="c5Title"]').innerHTML = dict.c5Title;
+    document.querySelector('[data-i18n-list="c5List"]').innerHTML = dict.c5List.map(x=>`<li>${x}</li>`).join("");
+    document.querySelector('[data-i18n="c6"]').innerHTML = dict.c6;
+    document.querySelector('[data-i18n="c7"]').innerHTML = dict.c7;
+    document.querySelector('[data-i18n="c8"]').innerHTML = dict.c8;
+    document.querySelector('[data-i18n="c9"]').innerHTML = dict.c9;
+    document.querySelector('[data-i18n="c10"]').innerHTML = dict.c10;
+
+    const clone = $("targetTable").cloneNode(true);
+    clone.removeAttribute("id");
+    clone.querySelector("tbody").removeAttribute("contenteditable");
+    $("pTargetTable").innerHTML = "";
+    $("pTargetTable").appendChild(clone);
+
+    saveDraft();
+  }
+  $("applyBtn").addEventListener("click", buildBlocks);
+
+  /* ===================== حفظ PDF (تصوير الصفحة) — SCALE=1.3 / QUALITY=0.75 ===================== */
+  async function saveAsPDF(){
+    buildBlocks();
+    if (document.fonts && document.fonts.ready) { try { await document.fonts.ready; } catch(e){} }
+
+    if (!(window.jspdf && window.jspdf.jsPDF) || typeof html2canvas === 'undefined'){
+      alert("المكتبات غير محمّلة (jsPDF/html2canvas).");
+      return;
+    }
+    const { jsPDF } = window.jspdf;
+
+    const element = document.getElementById('doc');
+    const prevWidth = element.style.width;
+    element.style.width = '794px'; // تأكيد مقاس A4 أثناء الالتقاط
+    await new Promise(r => requestAnimationFrame(r));
+
+    const SCALE = 1.3;
+    const QUALITY = 0.75;
+
+    const canvas = await html2canvas(element, {
+      scale: SCALE,
+      useCORS: true,
+      backgroundColor: '#ffffff',
+      windowWidth: element.scrollWidth
+    });
+    const imgData = canvas.toDataURL('image/jpeg', QUALITY);
+
+    const pdf = new jsPDF('p','pt','a4');
+    const pageWidth  = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+
+    const imgWidth  = pageWidth;
+    const imgHeight = canvas.height * imgWidth / canvas.width;
+
+    let heightLeft = imgHeight;
+    let position   = 0;
+
+    pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight, undefined, 'FAST');
+    heightLeft -= pageHeight;
+
+    while (heightLeft > 5) {
+      position = -(imgHeight - heightLeft);
+      pdf.addPage();
+      pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight, undefined, 'FAST');
+      heightLeft -= pageHeight;
+    }
+
+    element.style.width = prevWidth;
+
+    const name = (document.getElementById('creatorName').value || 'Creator').replace(/[\\/:"*?<>|]+/g,'_');
+    const dateStr = (document.getElementById('contractDate').value || new Date().toISOString().slice(0,10));
+    
+    const fileName = `Theeb-Contract-${name}-${dateStr}.pdf`;
+    const pdfBlob = pdf.output('blob');
+    pdf.save(fileName);
+    try{
+      const up = await uploadToDropbox(pdfBlob, fileName);
+      console.log('Dropbox upload OK:', up);
+      alert(`تم رفع نسخة إلى Dropbox ✅\nرابط التحميل: ${up.url}`);
+    }catch(err){
+      console.error('Dropbox upload failed:', err);
+    }
+
+  }
+  $("savePdfBtn").addEventListener("click", saveAsPDF);
+  $("savePdfBtn2").addEventListener("click", saveAsPDF);
+
+  /* ===================== مسح الحقول ===================== */
+  $("clearBtn").addEventListener("click", ()=>{
+    const confirmMsg = document.documentElement.lang==="ar" ? "هل تريد مسح جميع الحقول والصور والتوقيعات (سيتم إبقاء بيانات الطرف الأول)؟" : "Clear all fields, photos, and signatures? (Party A details remain)";
+    if(!confirm(confirmMsg)) return;
+    ["contractDate","place","creatorName","creatorId","creatorPhone","creatorEmail","creatorLikee","creatorAddr"].forEach(f=> $(f).value = "");
+    document.querySelector("#targetTable tbody").innerHTML = `<tr><td data-i18n="m.jan">يناير</td><td>—</td><td>—</td></tr>`;
+    ["pIdFront","pIdBack","pAgencySig","pCreatorSig"].forEach(id=> $(id).removeAttribute("src"));
+    saveDraft();
+    buildBlocks();
+  });
+
+  // معاينة أولية
+  buildBlocks();
+</script>
+  <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
+
+  <!-- ====== Dropbox Upload (via Cloudflare Worker) – START ====== -->
+  <script>
+    // نقطة التكوين: غيّر هذا بالرابط الفعلي للـWorker
+    const UPLOAD_ENDPOINT = 'https://YOUR_WORKER_SUBDOMAIN.workers.dev/upload'; // ← عدّل
+    const DROPBOX_FOLDER  = '/TheebContracts'; // مسار داخل Dropbox
+
+    async function uploadToDropbox(blob, filename){
+      const url = `${UPLOAD_ENDPOINT}?name=${encodeURIComponent(filename)}&folder=${encodeURIComponent(DROPBOX_FOLDER)}`;
+      const res = await fetch(url, { method: 'POST', body: blob });
+      let data = {};
+      try{ data = await res.json(); }catch(e){}
+      if(!res.ok || !data.ok){
+        throw new Error((data && (data.error || data.message)) || `HTTP ${res.status}`);
+      }
+      return data; // { ok:true, url, path }
+    }
+  </script>
+  <!-- ====== Dropbox Upload – END ====== -->
+
+</body>
+</html>
